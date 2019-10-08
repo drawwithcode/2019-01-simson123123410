@@ -1,30 +1,65 @@
+let bubbles = []
+
 function setup() {
- createCanvas(750, 750);
-  angleMode(DEGREES);
-  background (60);
-  noFill();
-  frameRate(120);
+ createCanvas(windowWidth, windowHeight);
+ for ( let i = 0; i < 100; i++){
+let x = random(width);
+let y = random(height);
+let r = random(1,60);
+let b  = new Bubble(x,y,r);
+ bubbles.push(b);
+}
 
 }
 
-function  draw() {
-  translate(width/2,height/2);
-  rotate(frameCount*83);
-  ellipse(100,0,50,400);
- stroke(
-    lerpColor(
-      color("#8FFFFA"),
-      color("#FF6D60"),
-
-      frameCount / 200
-    ));
-
-  ellipse(100,0,250);
-  if(frameCount == 350)noLoop();
-
-    ellipse(230,30,50);
-  if(frameCount == 20);
-  ellipse(300,50,20);
-
+function mousePressed(){
+  for (let i = 0 ; i < bubbles.length ; i++){
+  bubbles[i].clicked(mouseX, mouseY);
+  }
 }
-    
+
+
+
+
+
+
+
+function draw(){
+  background(10,30,282,9)
+
+  for (let i = 0 ; i < bubbles.length ; i++){
+  bubbles[i].move();
+  bubbles[i].show();
+  }
+ }
+
+class Bubble{
+constructor(x,y,r){
+  this.x = x;
+  this.y = y;
+  this.r =r;
+  this.brightness = 0;
+ }
+
+clicked(px, py){
+  let d = dist(px, py , this.x, this.y);
+  if (d < this.r){
+     this.brightness = 255
+  //console.log("CLICKED ON BUBBLE!");
+ }
+}
+
+
+
+  move(){
+   this.x = this.x + random(-5,5);
+   this.y = this.y + random(-5,5);
+ }
+
+show(){
+    stroke(188,10,225,50);
+    strokeWeight(4);
+    noFill(this.brightness, 125);
+    ellipse(this.x, this.y, this.r * 2);
+ }
+}
